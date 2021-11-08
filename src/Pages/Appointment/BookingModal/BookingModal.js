@@ -52,7 +52,7 @@ const BookingModal = ({
       serviceName: name,
       date: date.toLocaleDateString(),
     };
-    console.log(appointment);
+
     // send data to the server
     fetch("https://doctors-portal-bappy.herokuapp.com/appointments", {
       method: "POST",

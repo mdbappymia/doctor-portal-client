@@ -19,7 +19,7 @@ const Register = () => {
   const handleBlur = (e) => {
     const field = e.target.name;
     const value = e.target.value;
-    console.log(field, value);
+
     const newSignUpData = { ...signUpData };
     newSignUpData[field] = value;
     setSignUpData(newSignUpData);
