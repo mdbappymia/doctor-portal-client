@@ -1,4 +1,3 @@
-/* eslint-disable react-hooks/exhaustive-deps */
 import React, { useEffect, useState } from "react";
 import useAuth from "../../../hooks/useAuth";
 import Table from "@mui/material/Table";
@@ -24,7 +23,7 @@ const Appointments = ({ date }) => {
     )
       .then((res) => res.json())
       .then((data) => setAppointments(data));
-  }, [date]);
+  }, [date, user.email, token]);
   return (
     <TableContainer component={Paper}>
       <Table aria-label="Appointments table">

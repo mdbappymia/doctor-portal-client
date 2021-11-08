@@ -1,6 +1,6 @@
 import { Button, Grid, Typography } from "@mui/material";
 import React from "react";
-import { Box, display } from "@mui/system";
+import { Box } from "@mui/system";
 import doctor from "./../../../images/doctor.png";
 import bg from "./../../../images/appointment-bg.png";
 
