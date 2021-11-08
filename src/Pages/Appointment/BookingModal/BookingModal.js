@@ -54,7 +54,7 @@ const BookingModal = ({
     };
     console.log(appointment);
     // send data to the server
-    fetch("http://localhost:5000/appointments", {
+    fetch("https://doctors-portal-bappy.herokuapp.com/appointments", {
       method: "POST",
       headers: {
         "content-type": "application/json",

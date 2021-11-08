@@ -22,6 +22,7 @@ const Login = () => {
     signInWithGoogle,
     setIsLoading,
     setAuthError,
+    saveUser,
   } = useAuth();
   const location = useLocation();
   const history = useHistory();
@@ -43,6 +44,8 @@ const Login = () => {
     setIsLoading(true);
     signInWithGoogle()
       .then((result) => {
+        // save user to database
+        saveUser(result.user.email, result.user.displayName, "PUT");
         history.push(destination);
       })
       .catch((e) => setAuthError(e.message))

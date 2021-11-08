@@ -10,6 +10,7 @@ import {
   signInWithEmailAndPassword,
   signOut,
   updateProfile,
+  getIdToken,
 } from "firebase/auth";
 
 initializeAuthentication();
@@ -17,6 +18,8 @@ const useFirebase = () => {
   const [user, setUser] = useState({});
   const [authError, setAuthError] = useState("");
   const [isLoading, setIsLoading] = useState(true);
+  const [admin, setAdmin] = useState(false);
+  const [token, setToken] = useState("");
   const auth = getAuth();
 
   const signInWithGoogle = () => {
@@ -31,6 +34,9 @@ const useFirebase = () => {
         setAuthError("");
         const newUser = { email, displayName: name };
         setUser(newUser);
+
+        // save user to database
+        saveUser(email, name, "POST");
         // send name to firebase after creation
         updateProfile(auth.currentUser, {
           displayName: name,
@@ -57,6 +63,14 @@ const useFirebase = () => {
       .finally(() => setIsLoading(false));
   };
 
+  useEffect(() => {
+    fetch(`https://doctors-portal-bappy.herokuapp.com/users/${user.email}`)
+      .then((res) => res.json())
+      .then((data) => {
+        setAdmin(data.admin);
+      });
+  }, [user?.email]);
+
   const logOut = () => {
     setIsLoading(true);
     setIsLoading(true);
@@ -70,12 +84,27 @@ const useFirebase = () => {
       })
       .finally(() => setIsLoading(false));
   };
+  const saveUser = (email, displayName, methodName) => {
+    const user = { email, displayName };
+    fetch("https://doctors-portal-bappy.herokuapp.com/users", {
+      method: `${methodName}`,
+      headers: {
+        "content-type": "application/json",
+      },
+      body: JSON.stringify(user),
+    });
+  };
 
   //   observed user state
   useEffect(() => {
     const unsubscribed = onAuthStateChanged(auth, (user) => {
       if (user) {
         setUser(user);
+
+        getIdToken(user).then((idToken) => {
+          setToken(idToken);
+        });
+
         setAuthError("");
       } else {
         setUser({});
@@ -86,6 +115,8 @@ const useFirebase = () => {
   }, []);
   return {
     user,
+    admin,
+    token,
     setAuthError,
     setIsLoading,
     authError,
@@ -94,6 +125,7 @@ const useFirebase = () => {
     signInUser,
     logOut,
     isLoading,
+    saveUser,
   };
 };
 

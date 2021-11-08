@@ -15,17 +15,21 @@ import MailIcon from "@mui/icons-material/Mail";
 import MenuIcon from "@mui/icons-material/Menu";
 import Toolbar from "@mui/material/Toolbar";
 import Typography from "@mui/material/Typography";
-import { Button, Grid } from "@mui/material";
-import Calender from "../../Shared/Calender/Calender";
-import Appointments from "../Appointments/Appointments";
-import { NavLink } from "react-router-dom";
+import { Button } from "@mui/material";
+
+import DashboardHome from "../DashboardHome/DashboardHome";
+import { Switch, Route, Link, useRouteMatch } from "react-router-dom";
+import MakeAdmin from "../MakeAdmin/MakeAdmin";
+import AddDoctor from "../AddDoctor/AddDoctor";
+import useAuth from "../../../hooks/useAuth";
+import AdminRoute from "../../Login/AdminRoute/AdminRoute";
 
 const drawerWidth = 240;
 
 const Dashboard = ({ window }) => {
   const [mobileOpen, setMobileOpen] = useState(false);
-  const [date, setDate] = useState(new Date());
-
+  let { path, url } = useRouteMatch();
+  const { admin } = useAuth();
   const handleDrawerToggle = () => {
     setMobileOpen(!mobileOpen);
   };
@@ -33,9 +37,25 @@ const Dashboard = ({ window }) => {
   const drawer = (
     <div>
       <Toolbar />
-      <NavLink style={{ textDecoration: "none" }} to="/appointment">
-        <Button>Get Appointment</Button>
-      </NavLink>
+      <Link to="/appointment">
+        <Button color="inherit">Get Appointment</Button>
+      </Link>
+      <br />
+      <Link to={`${url}`}>
+        <Button color="inherit">Dashboard</Button>
+      </Link>
+      <br />
+      {admin && (
+        <Box>
+          <Link to={`${url}/makeAdmin`}>
+            <Button color="inherit">Make Admin</Button>
+          </Link>
+          <br />
+          <Link to={`${url}/addDoctor`}>
+            <Button color="inherit">Add Doctor</Button>
+          </Link>
+        </Box>
+      )}
       <Divider />
       <List>
         {["Inbox", "Starred", "Send email", "Drafts"].map((text, index) => (
@@ -126,16 +146,17 @@ const Dashboard = ({ window }) => {
         }}
       >
         <Toolbar />
-        <Typography paragraph>
-          <Grid container spacing={2}>
-            <Grid xs={12} md={6}>
-              <Calender date={date} setDate={setDate}></Calender>
-            </Grid>
-            <Grid xs={12} md={6}>
-              <Appointments date={date}></Appointments>
-            </Grid>
-          </Grid>
-        </Typography>
+        <Switch>
+          <Route exact path={path}>
+            <DashboardHome></DashboardHome>
+          </Route>
+          <AdminRoute path={`${path}/makeAdmin`}>
+            <MakeAdmin></MakeAdmin>
+          </AdminRoute>
+          <AdminRoute path={`${path}/addDoctor`}>
+            <AddDoctor></AddDoctor>
+          </AdminRoute>
+        </Switch>
       </Box>
     </Box>
   );
