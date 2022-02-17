@@ -27,7 +27,7 @@ const BookingModal = ({
   setBookingSuccess,
 }) => {
   const { user } = useAuth();
-  const { name, time } = booking;
+  const { name, time, price } = booking;
   const initialInfo = {
     patientName: user.displayName,
     email: user.email,
@@ -48,13 +48,14 @@ const BookingModal = ({
     e.preventDefault();
     const appointment = {
       ...bookingInfo,
+      price,
       time,
       serviceName: name,
       date: date.toLocaleDateString(),
     };
 
     // send data to the server
-    fetch("https://doctors-portal-bappy.herokuapp.com/appointments", {
+    fetch("http://localhost:5000/appointments", {
       method: "POST",
       headers: {
         "content-type": "application/json",

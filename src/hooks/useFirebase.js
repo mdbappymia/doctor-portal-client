@@ -27,7 +27,7 @@ const useFirebase = () => {
     return signInWithPopup(auth, provider);
   };
 
-  const registerUser = (email, password, name, history) => {
+  const registerUser = (email, password, name, navigate) => {
     setIsLoading(true);
     createUserWithEmailAndPassword(auth, email, password)
       .then((result) => {
@@ -43,7 +43,7 @@ const useFirebase = () => {
         })
           .then(() => {})
           .catch((error) => {});
-        history.replace("/");
+        navigate("/");
       })
       .catch((e) => {
         setAuthError(e.message);
@@ -51,12 +51,12 @@ const useFirebase = () => {
       .finally(() => setIsLoading(false));
   };
 
-  const signInUser = (email, password, location, history) => {
+  const signInUser = (email, password, location, navigate) => {
     setIsLoading(true);
     signInWithEmailAndPassword(auth, email, password)
       .then((result) => {
         const destination = location?.state?.from || "/";
-        history.replace(destination);
+        navigate(destination);
         setAuthError("");
       })
       .catch((e) => setAuthError(e.message))
@@ -64,7 +64,7 @@ const useFirebase = () => {
   };
 
   useEffect(() => {
-    fetch(`https://doctors-portal-bappy.herokuapp.com/users/${user.email}`)
+    fetch(`http://localhost:5000/users/${user.email}`)
       .then((res) => res.json())
       .then((data) => {
         setAdmin(data.admin);
@@ -86,7 +86,7 @@ const useFirebase = () => {
   };
   const saveUser = (email, displayName, methodName) => {
     const user = { email, displayName };
-    fetch("https://doctors-portal-bappy.herokuapp.com/users", {
+    fetch("http://localhost:5000/users", {
       method: `${methodName}`,
       headers: {
         "content-type": "application/json",

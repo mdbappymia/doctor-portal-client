@@ -9,13 +9,13 @@ import {
 } from "@mui/material";
 import { Grid } from "@mui/material";
 import login from "./../../../images/login.png";
-import { NavLink, useHistory } from "react-router-dom";
+import { NavLink, useNavigate } from "react-router-dom";
 import useAuth from "../../../hooks/useAuth";
 
 const Register = () => {
   const { registerUser, isLoading, user, authError } = useAuth();
   const [signUpData, setSignUpData] = useState({});
-  const history = useHistory();
+  const navigate = useNavigate();
   const handleBlur = (e) => {
     const field = e.target.name;
     const value = e.target.value;
@@ -34,7 +34,7 @@ const Register = () => {
       signUpData.email,
       signUpData.password,
       signUpData.name,
-      history
+      navigate
     );
   };
   return (

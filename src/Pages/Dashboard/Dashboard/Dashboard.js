@@ -16,19 +16,14 @@ import MenuIcon from "@mui/icons-material/Menu";
 import Toolbar from "@mui/material/Toolbar";
 import Typography from "@mui/material/Typography";
 import { Button } from "@mui/material";
-
-import DashboardHome from "../DashboardHome/DashboardHome";
-import { Switch, Route, Link, useRouteMatch } from "react-router-dom";
-import MakeAdmin from "../MakeAdmin/MakeAdmin";
-import AddDoctor from "../AddDoctor/AddDoctor";
+import { Outlet, Link } from "react-router-dom";
 import useAuth from "../../../hooks/useAuth";
-import AdminRoute from "../../Login/AdminRoute/AdminRoute";
 
 const drawerWidth = 240;
 
 const Dashboard = ({ window }) => {
   const [mobileOpen, setMobileOpen] = useState(false);
-  let { path, url } = useRouteMatch();
+
   const { admin } = useAuth();
   const handleDrawerToggle = () => {
     setMobileOpen(!mobileOpen);
@@ -41,17 +36,17 @@ const Dashboard = ({ window }) => {
         <Button color="inherit">Get Appointment</Button>
       </Link>
       <br />
-      <Link to={`${url}`}>
+      <Link to="/dashboard">
         <Button color="inherit">Dashboard</Button>
       </Link>
       <br />
       {admin && (
         <Box>
-          <Link to={`${url}/makeAdmin`}>
+          <Link to={`/dashboard/makeAdmin`}>
             <Button color="inherit">Make Admin</Button>
           </Link>
           <br />
-          <Link to={`${url}/addDoctor`}>
+          <Link to={`/dashboard/addDoctor`}>
             <Button color="inherit">Add Doctor</Button>
           </Link>
         </Box>
@@ -146,17 +141,7 @@ const Dashboard = ({ window }) => {
         }}
       >
         <Toolbar />
-        <Switch>
-          <Route exact path={path}>
-            <DashboardHome></DashboardHome>
-          </Route>
-          <AdminRoute path={`${path}/makeAdmin`}>
-            <MakeAdmin></MakeAdmin>
-          </AdminRoute>
-          <AdminRoute path={`${path}/addDoctor`}>
-            <AddDoctor></AddDoctor>
-          </AdminRoute>
-        </Switch>
+        <Outlet></Outlet>
       </Box>
     </Box>
   );

@@ -9,7 +9,7 @@ import {
 } from "@mui/material";
 import { Grid } from "@mui/material";
 import login from "./../../../images/login.png";
-import { NavLink, useLocation, useHistory } from "react-router-dom";
+import { NavLink, useLocation, useNavigate } from "react-router-dom";
 import useAuth from "../../../hooks/useAuth";
 
 const Login = () => {
@@ -25,7 +25,7 @@ const Login = () => {
     saveUser,
   } = useAuth();
   const location = useLocation();
-  const history = useHistory();
+  const navigate = useNavigate();
   const handleChange = (e) => {
     const field = e.target.name;
     const value = e.target.value;
@@ -34,7 +34,7 @@ const Login = () => {
     setLoginData(newLoginData);
   };
   const handleLoginSubmit = (e) => {
-    signInUser(loginData.email, loginData.password, location, history);
+    signInUser(loginData.email, loginData.password, location, navigate);
     e.preventDefault();
   };
   const destination = location?.state?.from || "/";
@@ -45,7 +45,7 @@ const Login = () => {
       .then((result) => {
         // save user to database
         saveUser(result.user.email, result.user.displayName, "PUT");
-        history.push(destination);
+        navigate(destination);
       })
       .catch((e) => setAuthError(e.message))
       .finally(() => {

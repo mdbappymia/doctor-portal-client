@@ -7,6 +7,7 @@ import TableContainer from "@mui/material/TableContainer";
 import TableHead from "@mui/material/TableHead";
 import TableRow from "@mui/material/TableRow";
 import Paper from "@mui/material/Paper";
+import { Link } from "react-router-dom";
 
 const Appointments = ({ date }) => {
   const { user, token } = useAuth();
@@ -14,7 +15,7 @@ const Appointments = ({ date }) => {
 
   useEffect(() => {
     fetch(
-      `https://doctors-portal-bappy.herokuapp.com/appointments?email=${user.email}&date=${date}`,
+      `http://localhost:5000/appointments?email=${user.email}&date=${date}`,
       {
         headers: {
           authorization: `Bearer ${token}`,
@@ -36,17 +37,25 @@ const Appointments = ({ date }) => {
           </TableRow>
         </TableHead>
         <TableBody>
-          {appointments.map((row) => (
+          {appointments.map((appointment) => (
             <TableRow
-              key={row._id}
+              key={appointment._id}
               sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
             >
               <TableCell component="th" scope="row">
-                {row.patientName}
+                {appointment.patientName}
               </TableCell>
-              <TableCell align="right">{row.time}</TableCell>
-              <TableCell align="right">{row.serviceName}</TableCell>
-              <TableCell align="right">{row.fat}</TableCell>
+              <TableCell align="right">{appointment.time}</TableCell>
+              <TableCell align="right">{appointment.serviceName}</TableCell>
+              <TableCell align="right">
+                {appointment.payment ? (
+                  "Paid"
+                ) : (
+                  <Link to={`/dashboard/payment/${appointment._id}`}>
+                    <button>Pay</button>
+                  </Link>
+                )}
+              </TableCell>
             </TableRow>
           ))}
         </TableBody>
